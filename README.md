@@ -9,22 +9,23 @@ Background
 ==========
 
 TrippLite offers [UI software](https://www.tripplite.com/products/power-alert)
-for monitoring its batteries. However, most of its batteries only have USB,
-and the only existing TrippLite software requires a local install.
+for monitoring its batteries. However, most of its batteries don't have
+network access, and the existing TrippLite software requires a local install.
 
-I wanted to monitor battery health from a remote headless Linux server, so I
-wrote this driver.
+I wanted to monitor the UPS from a remote headless Linux server, so I wrote
+this tool.
 
 Installation
 ============
 
 ```
-sudo apt install gcc libusb-1.0-0-dev libudev-dev
-pip install hidapi
+apt install gcc libusb-1.0-0-dev libudev-dev
+pip install tripplite
 ```
 
 Connect a USB cable from the UPS to your headless server, and you should be
-ready to run.
+ready to run. If you don't want to run as root, see *Note on Permissions*
+below.
 
 Command Line
 ============
@@ -63,7 +64,10 @@ $ tripplite
 If you have multiple TrippLite devices connected to the server, you'll need to
 specify a product id (findable on `lsusb`). See `tripplite --help` for more.
 
-Combine with a CLI JSON parser for basic shell scripts.
+To use in shell scripts, parse the json output with something like
+[jq](https://stedolan.github.io/jq/). For example,
+`tripplite | jq '.status."ac present"` will return whether or not the unit
+detects AC power.
 
 Python
 ======
@@ -79,5 +83,21 @@ battery.close()
 ```
 
 The `state` variable will contain an object with the same format as above. Use
-`state['status']['discharging']` and `state['status']['shutdown imminent']` for
+`state['status']['ac present']` and `state['status']['shutdown imminent']` for
 alerts, and consider logging voltage, frequency, and power.
+
+Note on Permissions
+===================
+
+To read the TrippLite, you need access to the USB port. You have options:
+
+ * Run everything as root
+ * Add your user to the `dialout` group to access *all* serial ports
+ * Create a group restricted to accessing TrippLite USB devices through `udev`
+
+For the last option, the rule looks like:
+
+```
+echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="09ae", GROUP="tripplite"' > /etc/udev/rules.d/tripplite.rules
+udevadm control --reload-rules
+```
