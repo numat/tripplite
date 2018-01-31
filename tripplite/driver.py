@@ -121,7 +121,7 @@ class Battery(object):
         if options['address'] != report[0]:
             raise IOError("Received unexpected data.")
         if options['format'] == 'b':
-            bits = '{:08b}'.format(report[1])
+            bits = '{:08b}'.format(report[1])[::-1]
             return {k: bool(int(v)) for k, v in zip(options['keys'], bits)}
         elif options['format'] == 'i' and options['bytes'] == 2:
             return (report[2] << 8) + report[1]
