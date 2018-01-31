@@ -66,7 +66,7 @@ specify a product id (findable on `lsusb`). See `tripplite --help` for more.
 
 To use in shell scripts, parse the json output with something like
 [jq](https://stedolan.github.io/jq/). For example,
-`tripplite | jq '.status."ac present"` will return whether or not the unit
+`tripplite | jq '.status."ac present"'` will return whether or not the unit
 detects AC power.
 
 Python
@@ -77,9 +77,8 @@ text alerts), consider using a Python script.
 
 ```python
 from tripplite import Battery
-battery = Battery()
-state = battery.get()
-battery.close()
+with Battery() as battery:
+    print(battery.get())
 ```
 
 The `state` variable will contain an object with the same format as above. Use

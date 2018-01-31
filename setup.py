@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="tripplite",
-    version="0.1.1",
+    version="0.2.0",
     description="Python driver for TrippLite UPS battery backups.",
     url="http://github.com/numat/tripplite/",
     author="Patrick Fuller",

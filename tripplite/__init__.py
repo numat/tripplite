@@ -17,9 +17,8 @@ def command_line():
                         help="The TrippLite UPS HID product idea. Only needed "
                         "if multiple TrippLite devices are connected.")
     args = parser.parse_args()
-    battery = Battery(args.product_id)
-    print(json.dumps(battery.get(), indent=4, sort_keys=True))
-    battery.close()
+    with Battery(args.product_id) as battery:
+        print(json.dumps(battery.get(), indent=4, sort_keys=True))
 
 
 if __name__ == '__main__':

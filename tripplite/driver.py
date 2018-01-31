@@ -84,7 +84,24 @@ class Battery(object):
                 if multiple TrippLite HID devices are connected.
         """
         self.device = hid.device()
-        self.device.open(vendor_id, product_id or self._get_product_id())
+        self.product_id = product_id or self._get_product_id()
+
+    def __enter__(self):
+        """Provide entrance to context manager."""
+        self.open()
+        return self
+
+    def __exit__(self, *args):
+        """Provide exit to context manager."""
+        self.close()
+
+    def open(self):
+        """Open connection to the device."""
+        self.device.open(vendor_id, self.product_id)
+
+    def close(self):
+        """Close connection to the device."""
+        self.device.close()
 
     def _get_product_id(self):
         """Search through connected HID devices to find the TrippLite UPS.
@@ -129,7 +146,3 @@ class Battery(object):
             return report[1]
         elif options['format'] == 'f':
             return ((report[2] << 8) + report[1]) / 10.0
-
-    def close(self):
-        """Close connection to the device."""
-        self.device.close()
