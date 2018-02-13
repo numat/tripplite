@@ -126,7 +126,7 @@ class Battery(object):
                     output[category][subcategory] = self._read(options)
         return output
 
-    def _read(self, options):
+    def _read(self, options, retries=3):
         """Read a HID report from the TrippLite connection.
 
         This reads binary, one-byte ints, two-byte ints (little-endian),
@@ -136,6 +136,8 @@ class Battery(object):
         report = self.device.get_feature_report(options['address'],
                                                 options['bytes'] + 1)
         if not report:
+            if retries > 0:
+                return self._read(options, retries - 1)
             raise IOError("Did not receive data.")
         if options['address'] != report[0]:
             raise IOError("Received unexpected data.")
