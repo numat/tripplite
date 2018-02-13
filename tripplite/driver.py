@@ -135,6 +135,8 @@ class Battery(object):
         """
         report = self.device.get_feature_report(options['address'],
                                                 options['bytes'] + 1)
+        if not report:
+            raise IOError("Did not receive data.")
         if options['address'] != report[0]:
             raise IOError("Received unexpected data.")
         if options['format'] == 'b':
