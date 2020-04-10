@@ -14,7 +14,7 @@ def command_line():
 
     parser = argparse.ArgumentParser(description="Read TrippLite status.")
     parser.add_argument('-p', '--product_id', type=int, default=None,
-                        help="The TrippLite UPS HID product idea. Only needed "
+                        help="The TrippLite UPS HID product id. Only needed "
                         "if multiple TrippLite devices are connected.")
     args = parser.parse_args()
     with Battery(args.product_id) as battery:

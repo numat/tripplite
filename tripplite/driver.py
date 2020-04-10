@@ -82,6 +82,7 @@ class Battery(object):
         Args:
             product_id (Optional): The HID product ID of the UPS. Only needed
                 if multiple TrippLite HID devices are connected.
+
         """
         self.device = hid.device()
         self.product_id = product_id or self._get_product_id()

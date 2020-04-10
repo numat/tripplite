@@ -15,6 +15,13 @@ network access, and the existing TrippLite software requires a local install.
 I wanted to monitor the UPS from a remote headless Linux server, so I wrote
 this tool.
 
+Supported Hardware
+==================
+
+This has been exclusively tested on the TrippLite SMART1500LCD UPS. It will
+likely work on similar firmware but there is a known communication issue with
+some other TrippLite models (see [numat/tripplite#3](https://github.com/numat/tripplite/issues/3)).
+
 Installation
 ============
 
