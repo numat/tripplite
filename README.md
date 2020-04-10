@@ -22,6 +22,8 @@ This has been exclusively tested on the TrippLite SMART1500LCD UPS. It will
 likely work on similar firmware but there is a known communication issue with
 some other TrippLite models (see [numat/tripplite#3](https://github.com/numat/tripplite/issues/3)).
 
+Use `lsusb` to check. `09ae:2012` should work, while `09ae:3016` may not.
+
 Installation
 ============
 
@@ -68,9 +70,6 @@ $ tripplite
 }
 ```
 
-If you have multiple TrippLite devices connected to the server, you'll need to
-specify a product id (findable on `lsusb`). See `tripplite --help` for more.
-
 To use in shell scripts, parse the json output with something like
 [jq](https://stedolan.github.io/jq/). For example,
 `tripplite | jq '.status."ac present"'` will return whether or not the unit
@@ -91,6 +90,19 @@ with Battery() as battery:
 The `state` variable will contain an object with the same format as above. Use
 `state['status']['ac present']` and `state['status']['shutdown imminent']` for
 alerts, and consider logging voltage, frequency, and power.
+
+If you are logging multiple batteries, you will need to handle each connection
+separately.
+
+```python
+from tripplite import Battery, battery_paths
+for path in battery_paths:
+    with Battery(path) as battery:
+        print(battery.get())
+```
+
+These paths are unfortunately non-deterministic and will change on each
+iteration.
 
 Note on Permissions
 ===================

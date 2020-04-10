@@ -3,6 +3,13 @@ import hid
 
 vendor_id = 0x09ae
 
+# These change on each call to `hid.enumerate` so must be cached.
+battery_paths = [
+    device['path'].decode()
+    for device in hid.enumerate()
+    if device['vendor_id'] == vendor_id
+]
+
 structure = {
     'config': {
         'voltage': {
@@ -76,16 +83,20 @@ structure = {
 class Battery(object):
     """Driver for TrippLite UPS battery backups."""
 
-    def __init__(self, product_id=None):
+    def __init__(self, path=None):
         """Connect to the device.
 
         Args:
-            product_id (Optional): The HID product ID of the UPS. Only needed
-                if multiple TrippLite HID devices are connected.
+            path (Optional): The HID path of the device. Only needed if
+            reading multiple devices.
 
         """
         self.device = hid.device()
-        self.product_id = product_id or self._get_product_id()
+        if not battery_paths:
+            raise IOError("Could not find any connected TrippLite devices.")
+        if path is not None and path not in battery_paths:
+            raise ValueError(f"Path {path} not in {', '.join(battery_paths)}.")
+        self.path = path or battery_paths[0]
 
     def __enter__(self):
         """Provide entrance to context manager."""
@@ -98,22 +109,11 @@ class Battery(object):
 
     def open(self):
         """Open connection to the device."""
-        self.device.open(vendor_id, self.product_id)
+        self.device.open_path(self.path.encode())
 
     def close(self):
         """Close connection to the device."""
         self.device.close()
-
-    def _get_product_id(self):
-        """Search through connected HID devices to find the TrippLite UPS.
-
-        This assumes that only one TrippLite is connected to the computer.
-        """
-        try:
-            return next(d['product_id'] for d in hid.enumerate()
-                        if d['vendor_id'] == vendor_id)
-        except StopIteration:
-            raise IOError("Could not find any connected TrippLite devices.")
 
     def get(self):
         """Return an object containing all available data."""
