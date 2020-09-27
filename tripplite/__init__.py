@@ -4,7 +4,7 @@ Python driver for TrippLite UPS battery backups.
 Distributed under the GNU General Public License v2
 Copyright (C) 2018 NuMat Technologies
 """
-from tripplite.driver import Battery, battery_paths
+from tripplite.driver import Battery, get_battery_paths
 
 
 def command_line():
@@ -13,6 +13,7 @@ def command_line():
     import json
 
     argparse.ArgumentParser(description="Read TrippLite devices.")
+    battery_paths = get_battery_paths()
 
     if not battery_paths:
         raise IOError("No TrippLite devices found.")

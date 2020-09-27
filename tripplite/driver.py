@@ -3,12 +3,13 @@ import hid
 
 vendor_id = 0x09ae
 
-# These change on each call to `hid.enumerate` so must be cached.
-battery_paths = [
-    device['path'].decode()
-    for device in hid.enumerate()
-    if device['vendor_id'] == vendor_id
-]
+def get_battery_paths():
+    # These change on each call to `hid.enumerate` so must be cached.
+    return [
+        device['path'].decode()
+        for device in hid.enumerate()
+        if device['vendor_id'] == vendor_id
+    ]
 
 structure = {
     'config': {
