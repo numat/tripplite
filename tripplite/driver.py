@@ -1,7 +1,9 @@
 """Driver for TrippLite UPS battery backups."""
 import hid
 
+battery_paths = None
 vendor_id = 0x09ae
+
 
 def get_battery_paths():
     # These change on each call to `hid.enumerate` so must be cached.
@@ -10,6 +12,7 @@ def get_battery_paths():
         for device in hid.enumerate()
         if device['vendor_id'] == vendor_id
     ]
+
 
 structure = {
     'config': {
@@ -94,7 +97,7 @@ class Battery(object):
         """
         self.device = hid.device()
         if not battery_paths:
-            raise IOError("Could not find any connected TrippLite devices.")
+            get_battery_paths()
         if path is not None and path not in battery_paths:
             raise ValueError(f"Path {path} not in {', '.join(battery_paths)}.")
         self.path = path or battery_paths[0]
