@@ -14,9 +14,16 @@ setup(
     author="Patrick Fuller",
     author_email="pat@numat-tech.com",
     packages=['tripplite'],
+    py_modules=['tripplite_exporter'],
     install_requires=['hidapi'],
     entry_points={
-        'console_scripts': [('tripplite = tripplite:command_line')]
+        'console_scripts': [
+            'tripplite = tripplite:command_line',
+            'tripplite-exporter = tripplite_exporter:main [exporter]',
+        ],
+    },
+    extras_require={
+        "exporter": ["prometheus_client"],
     },
     license='GPLv2',
     classifiers=[
