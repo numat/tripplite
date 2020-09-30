@@ -115,7 +115,9 @@ udevadm control --reload-rules
 
 ## Prometheus Exporter
 
-This package offers an extra install to include a [Prometheus Exporter](https://prometheus.io/docs/instrumenting/exporters/) which allows for data collection into a prometheus time series database. Esentially it's a small `HTTP` server that allows Prometheus to *scrape* to grab matrics at a configurable period.
+This package offers an extra install to include a [Prometheus Exporter](https://prometheus.io/docs/instrumenting/exporters/)
+which allows for data collection into a prometheus time series database. Esentially it's a small `HTTP` server that allows
+Prometheus to *scrape* grabbing metrics at a configurable period.
 
 ### Install
 
@@ -125,8 +127,11 @@ pip install tripplite[exporter]
 
 * This adds the [prometheus_client](https://pypi.org/project/prometheus-client/) dependency.
 
-You can then manually run the `triplite-exporter` cli or use the [tripplite_exporter.service](https://github.com/numat/tripplite/blob/master/tripplite_exporter.service) systemd unit file to have systemd run and supervise the process.
+You can then manually run the `triplite-exporter` cli or use the
+[tripplite_exporter.service](https://github.com/numat/tripplite/blob/master/tripplite_exporter.service)
+systemd unit file to have systemd run and supervise the process.
 
 ### Failure Mode
 
-The script will try to close and reopen the USB serial connection to the device on an `OSError`. If an open fails, the script will exit with the return code of 2.
+The script will try to close and reopen the USB serial connection to the device on an `OSError`. If an open fails,
+the script will exit with the return code of 2.

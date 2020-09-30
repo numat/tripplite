@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/tripplite_exporter
+ExecStart=/usr/local/bin/tripplite-exporter
 Restart=on-failure
 # Limit to 3 restarts per 30 seconds
 RestartSec=5
