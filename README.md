@@ -34,7 +34,7 @@ below.
 
 # Command Line
 
-```json
+```
 $ tripplite
 {
     "config": {
@@ -96,26 +96,29 @@ for path in battery_paths:
 ```
 
 These paths are unfortunately non-deterministic and will change on each
-iteration. For long running processes please prefer to keep an open `Battery`
-object and open + close on read errors. For example:
+iteration.
+
+For long polling, you can improve stability by keeping connections open as long
+as possible and reconnecting on error. For example:
 
 ```python
-    def check_batteries(
-        self, battery_paths: List[str], check_period: float = 30.0
-    ) -> None:
-        """Read batteries and reopen in error"""
-        self.batteries = [Battery(path) for path in battery_paths]
-        for battery in self.batteries:
+state = None
+
+def read_batteries(check_period=5):
+    """Read battery and reopen in error. Use for long polling."""
+    battery = Battery()
+    battery.open()
+    while True:
+        time.sleep(check_period)
+        try:
+            state = battery.get()
+        except OSError:
+            logging.exception(f"Could not read battery {battery}.")
+            battery.close()
             battery.open()
-        while True:
-            time.sleep(check_period)
-            for state, battery in zip(self.state, self.batteries):
-                try:
-                    state.update(battery.get())
-                except OSError:
-                    logger.exception(f"Could not read battery {battery}.")
-                    battery.close()
 ```
+
+An example for multiple batteries can be found in [numat/tripplite#6](https://github.com/numat/tripplite/pull/6#issuecomment-700152340).
 
 ## Note on Permissions
 
