@@ -21,7 +21,10 @@ def _parse_args() -> argparse.Namespace:
         "-d", "--debug", action="store_true", help="Verbose debug output"
     )
     parser.add_argument(
-        "--exporter", help="Format of data export [Default: JSON]"
+        "--exporter",
+        choices=["json", "prometheus"],
+        default="json",
+        help="Format of data export [Default = json]",
     )
     parser.add_argument(
         "-p",
@@ -35,7 +38,6 @@ def _parse_args() -> argparse.Namespace:
 
 def command_line() -> int:
     """Command line tool exposed through package install."""
-
     args = _parse_args()
     logging.basicConfig(
         format="[%(asctime)s] %(levelname)s: %(message)s (%(filename)s:%(lineno)d)",
@@ -45,19 +47,20 @@ def command_line() -> int:
     if not battery_paths:
         raise IOError("No TrippLite devices found.")
 
-    if args.exporter and "prometheus" in args.exporter:
+    if args.exporter == "json":
+        import json
+        output = []
+        for path in battery_paths:
+            with Battery(path) as battery:
+                output.append(battery.get())
+        if len(output) == 1:
+            output = output[0]
+        print(json.dumps(output, indent=4, sort_keys=True))
+
+    elif args.exporter == "prometheus":
         import tripplite.prometheus
         return tripplite.prometheus.serve(args)
 
-    import json
-
-    output = []
-    for path in battery_paths:
-        with Battery(path) as battery:
-            output.append(battery.get())
-    if len(output) == 1:
-        output = output[0]
-    print(json.dumps(output, indent=4, sort_keys=True))
     return 0
 
 
