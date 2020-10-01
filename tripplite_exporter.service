@@ -1,0 +1,15 @@
+[Unit]
+Description=Daemon to collect UPS stats for prometheus
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/tripplite -p 6969 --exporter=prometheus
+Restart=on-failure
+# Limit to 3 restarts per 30 seconds
+RestartSec=5
+StartLimitInterval=30
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target

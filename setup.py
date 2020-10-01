@@ -16,7 +16,12 @@ setup(
     packages=['tripplite'],
     install_requires=['hidapi'],
     entry_points={
-        'console_scripts': [('tripplite = tripplite:command_line')]
+        'console_scripts': [
+            'tripplite = tripplite:command_line',
+        ],
+    },
+    extras_require={
+        "exporter": ["prometheus_client"],
     },
     license='GPLv2',
     classifiers=[
