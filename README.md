@@ -96,7 +96,26 @@ for path in battery_paths:
 ```
 
 These paths are unfortunately non-deterministic and will change on each
-iteration. For long running processes please prefer to keep an open `Battery` object and open + close on read errors.
+iteration. For long running processes please prefer to keep an open `Battery`
+object and open + close on read errors. For example:
+
+```python
+    def check_batteries(
+        self, battery_paths: List[str], check_period: float = 30.0
+    ) -> None:
+        """Read batteries and reopen in error"""
+        self.batteries = [Battery(path) for path in battery_paths]
+        for battery in self.batteries:
+            battery.open()
+        while True:
+            time.sleep(check_period)
+            for state, battery in zip(self.state, self.batteries):
+                try:
+                    state.update(battery.get())
+                except OSError:
+                    logger.exception(f"Could not read battery {battery}.")
+                    battery.close()
+```
 
 ## Note on Permissions
 
