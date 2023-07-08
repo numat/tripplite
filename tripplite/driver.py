@@ -118,6 +118,7 @@ class Battery(object):
     def get(self):
         """Return an object containing all available data."""
         output = {}
+        output['device_id'] = self.path
         for category, data in structure.items():
             if 'address' in data:
                 output[category] = self._read(data)
