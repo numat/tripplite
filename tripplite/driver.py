@@ -80,7 +80,7 @@ structure = {
 }
 
 
-class Battery(object):
+class Battery:
     """Driver for TrippLite UPS battery backups."""
 
     def __init__(self, path=None):
@@ -144,7 +144,7 @@ class Battery(object):
         if options['address'] != report[0]:
             raise OSError("Received unexpected data.")
         if options['format'] == 'b':
-            bits = '{:08b}'.format(report[1])[::-1]
+            bits = f'{report[1]:08b}'[::-1]
             return {k: bool(int(v)) for k, v in zip(options['keys'], bits)}
         elif options['format'] == 'i' and options['bytes'] == 2:
             return (report[2] << 8) + report[1]
