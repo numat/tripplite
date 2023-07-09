@@ -45,7 +45,7 @@ def command_line() -> int:
     )
 
     if not battery_paths:
-        raise IOError("No TrippLite devices found.")
+        raise OSError("No TrippLite devices found.")
 
     if args.exporter == "json":
         import json

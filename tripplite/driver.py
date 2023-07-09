@@ -93,7 +93,7 @@ class Battery(object):
         """
         self.device = hid.device()
         if not battery_paths:
-            raise IOError("Could not find any connected TrippLite devices.")
+            raise OSError("Could not find any connected TrippLite devices.")
         if path is not None and path not in battery_paths:
             raise ValueError(f"Path {path} not in {', '.join(battery_paths)}.")
         self.path = path or battery_paths[0]
@@ -140,9 +140,9 @@ class Battery(object):
         if not report:
             if retries > 0:
                 return self._read(options, retries - 1)
-            raise IOError("Did not receive data.")
+            raise OSError("Did not receive data.")
         if options['address'] != report[0]:
-            raise IOError("Received unexpected data.")
+            raise OSError("Received unexpected data.")
         if options['format'] == 'b':
             bits = '{:08b}'.format(report[1])[::-1]
             return {k: bool(int(v)) for k, v in zip(options['keys'], bits)}
