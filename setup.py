@@ -10,7 +10,7 @@ setup(
     description="Python driver for TrippLite UPS battery backups.",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url="http://github.com/numat/tripplite/",
+    url="https://github.com/numat/tripplite/",
     author="Patrick Fuller",
     author_email="pat@numat-tech.com",
     packages=['tripplite'],
@@ -21,7 +21,10 @@ setup(
         ],
     },
     extras_require={
-        "exporter": ["prometheus_client"],
+        'exporter': ['prometheus_client'],
+        'test': [
+            'ruff',
+        ],
     },
     license='GPLv2',
     classifiers=[

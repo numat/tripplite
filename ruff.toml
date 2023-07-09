@@ -1,0 +1,27 @@
+line-length = 120
+ignore = [
+    "PLR2004",
+    "D104",
+    "D107",
+    "C901",
+    "RUF012",  # typing.ClassVar
+]
+exclude = ["venv*"]
+select = [
+    "C",   # complexity
+    "D",   # docstrings
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "PT",  # flake8-pytest
+    "RUF", # ruff base config
+    "SIM", # flake-simplify
+    "W",   # pycodestyle warnings
+    "YTT", # flake8-2020
+    # "ARG", # flake8-unused args
+    "B"    # bandit
+]
+target-version = "py37"
+[pydocstyle]
+convention = "pep257"
