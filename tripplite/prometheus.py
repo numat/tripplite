@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Collector of metrics from TripLite battery backup for Prometheus."""
 
 import argparse
 import logging
@@ -27,8 +28,11 @@ HOSTNAME = getfqdn()
 
 
 class PrometheusCollector(Collector):
-    """Prometheus Collector class to get Dict from Battery and export Prometheus
-    Guages via HTTP server."""
+    """
+    Prometheus Collector class.
+
+    Get Dict from Battery and export Prometheus Guages via HTTP server.
+    """
 
     key_prefix: str = "tripplite"
     labels: List[str] = ["hostname"]
@@ -50,6 +54,7 @@ class PrometheusCollector(Collector):
         return g
 
     def collect(self) -> Generator[GaugeMetricFamily, None, None]:
+        """Collect metrics to expose for Prometheus."""
         start_time = time.time()
         LOG.info("Collection started")
 
@@ -71,6 +76,7 @@ class PrometheusCollector(Collector):
 
 
 def serve(args: argparse.Namespace) -> int:
+    """Serve metrics for Prometheus to scrape."""
     start_http_server(args.port)
     REGISTRY.register(PrometheusCollector())
     LOG.info(f"Tripplite UPS Prometheus Exporter - listening on {args.port}")
