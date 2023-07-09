@@ -8,21 +8,20 @@ import time
 from socket import getfqdn
 from typing import Generator, List
 
+from tripplite.collectors import Collector
 
 LOG = logging.getLogger(__name__)
 
 
 try:
-    from prometheus_client.core import GaugeMetricFamily, REGISTRY
     from prometheus_client import start_http_server
+    from prometheus_client.core import REGISTRY, GaugeMetricFamily
 except ImportError as ie:
     LOG.error(
         f"prometheus_client not installed: {ie}. Please install with 'exporter' "
         "extra - e.g. `pip install tripplite[exporter]`"
     )
     sys.exit(1)
-from tripplite.collectors import Collector
-
 
 HOSTNAME = getfqdn()
 

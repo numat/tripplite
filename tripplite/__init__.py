@@ -10,7 +10,6 @@ import sys
 
 from tripplite.driver import Battery, battery_paths
 
-
 DEFAULT_PORT = 6969
 LOG = logging.getLogger(__name__)
 
