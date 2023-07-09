@@ -138,7 +138,7 @@ udevadm control --reload-rules
 ## Prometheus Exporter
 
 This package offers an extra install to include a [Prometheus Exporter](https://prometheus.io/docs/instrumenting/exporters/)
-which allows for data collection into a prometheus time series database. Esentially it's a small `HTTP` server that allows
+which allows for data collection into a prometheus time series database. Essentially it's a small `HTTP` server that allows
 Prometheus to *scrape* grabbing metrics at a configurable period.
 
 ### Install
