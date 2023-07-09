@@ -6,7 +6,7 @@ with open('README.md') as in_file:
 
 setup(
     name="tripplite",
-    version="0.3.0",
+    version="0.4.0",
     description="Python driver for TrippLite UPS battery backups.",
     long_description=long_description,
     long_description_content_type='text/markdown',
