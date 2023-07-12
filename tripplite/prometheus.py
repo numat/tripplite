@@ -63,6 +63,10 @@ class PrometheusCollector(Collector):
             return
 
         for category, value in ups_data.items():
+            # Device USB ID is not of interest - lets ignore it
+            if category == "device_id":
+                continue
+
             if isinstance(value, int):
                 yield self._handle_counter(category, value)
             else:
