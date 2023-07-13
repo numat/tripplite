@@ -63,7 +63,7 @@ class PrometheusCollector(Collector):
             return
 
         for category, value in ups_data.items():
-            # Device USB ID is not of interest - lets ignore it
+            # Device USB ID is not of interest - ignore it
             if category == "device_id":
                 continue
 
